@@ -1,11 +1,21 @@
+// app/api/quiz/[id]/route.ts
+
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/prisma";
 
+// --- FIX IS HERE ---
+interface RouteContext {
+  params: {
+    id: string;
+  }
+}
+
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteContext // Use the defined interface here
 ) {
+  // --- END FIX ---
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -46,4 +56,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}
