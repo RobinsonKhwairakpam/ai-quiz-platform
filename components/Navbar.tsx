@@ -15,10 +15,10 @@ async function Navbar() {
   const user = await currentUser();
   if (user) await syncUser();
   return (
-    <nav className="container flex justify-between gap-2 items-center mx-auto p-3">
+    <nav className="w-full flex justify-between gap-2 items-center mx-auto pt-3 pb-2 px-12 border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
       <Link href={"/"}>
         <div className="text-2xl cursor-pointer gradient-title">
-          Career Coach
+          AI Quiz Platform
         </div>
       </Link>
       <div>

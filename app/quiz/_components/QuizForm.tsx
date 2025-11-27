@@ -11,36 +11,42 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { generateQuiz, saveQuiz } from "@/actions/quiz";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const QuizForm = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [topicTitle, setTopicTitle] = useState("");
   const [numQuestions, setNumQuestions] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!topicTitle || !numQuestions) return;
-
+    setLoading(true);
     // Add your submit logic here
     const questions = await generateQuiz(topicTitle, Number(numQuestions));
-    const quiz = await saveQuiz(questions)
-    if(quiz.id){
-      router.push(`/quiz/${quiz.id}`)
+    const quiz = await saveQuiz(questions);
+    setLoading(false);
+    if (quiz.id) {
+      router.push(`/quiz/${quiz.id}`);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-[30rem] w-full mx-auto "
-    >
+    <form onSubmit={handleSubmit} className="max-w-[30rem] w-full mx-auto ">
       <Card className="px-3 py-8">
         <CardHeader>
-            <CardTitle className="text-xl font-bold">Create a Quiz</CardTitle>
-            <CardDescription>Choose a topic</CardDescription>
+          <CardTitle className="text-xl font-bold">Create a Quiz</CardTitle>
+          <CardDescription>Choose a topic</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -53,11 +59,11 @@ const QuizForm = () => {
             />
           </div>
 
-          <div className="space-y-3 mt-7">
+          <div className="space-y-3 mt-8">
             <Label htmlFor="questions">Number of Questions</Label>
             <Select onValueChange={setNumQuestions}>
               <SelectTrigger className="w-full" id="questions">
-                <SelectValue  placeholder="Select number" />
+                <SelectValue placeholder="Select number" />
               </SelectTrigger>
               <SelectContent>
                 {[5, 10, 15, 20].map((num) => (
@@ -71,10 +77,11 @@ const QuizForm = () => {
 
           <Button
             type="submit"
-            className="w-full mt-5"
-            disabled={!topicTitle || !numQuestions}
+            className="w-full mt-7 flex items-center justify-center gap-1"
+            disabled={!topicTitle || !numQuestions || loading}
           >
-            Create Quiz
+            {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {loading ? "Generating..." : "Create Quiz"}
           </Button>
         </CardContent>
       </Card>
