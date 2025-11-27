@@ -7,8 +7,6 @@ import {
 import db from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import React from "react";
-import trophy from "@/public/trophy.png";
-import Image from "next/image";
 import { MoveLeft, Trophy } from "lucide-react";
 import Link from "next/link";
 
