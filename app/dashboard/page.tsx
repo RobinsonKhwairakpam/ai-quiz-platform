@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@clerk/nextjs/server";
-import { History, Plus, Target, Trophy } from "lucide-react";
+import { Plus, Target, Trophy } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -32,18 +32,18 @@ async function Dashboard() {
   const completedQuizzes = quizzes.filter(
     (quiz) => quiz.type === "QUIZ" && quiz.score !== null && quiz.questions?.length > 0
   );
-  
+
   const totalAttempts = completedQuizzes.length;
-  
+
   const averageScore = totalAttempts > 0
     ? Math.round(
-        completedQuizzes.reduce((acc, quiz) => {
-          const percent = ((quiz.score || 0) / quiz.questions.length) * 100;
-          return acc + percent;
-        }, 0) / totalAttempts
-      )
+      completedQuizzes.reduce((acc, quiz) => {
+        const percent = ((quiz.score || 0) / quiz.questions.length) * 100;
+        return acc + percent;
+      }, 0) / totalAttempts
+    )
     : 0;
-  
+
 
   return (
     <main className="px-7 py-5 mx-auto max-w-[85rem]">
