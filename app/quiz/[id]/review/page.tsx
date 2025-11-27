@@ -9,6 +9,8 @@ import { auth } from "@clerk/nextjs/server";
 import React from "react";
 import trophy from "@/public/trophy.png";
 import Image from "next/image";
+import { MoveLeft, Trophy } from "lucide-react";
+import Link from "next/link";
 
 type ReviewPageParams = {
   params: {
@@ -19,9 +21,10 @@ type ReviewPageParams = {
 const ReviewPage = async ({ params }: ReviewPageParams) => {
   const { userId } = await auth();
   if (!userId) return <div className="text-center">Unauthorized</div>;
+  const paramsId = await params
 
   const quiz = await db.quiz.findUnique({
-    where: { id: params.id },
+    where: { id: paramsId.id },
     include: {
       questions: true,
     },
@@ -31,12 +34,12 @@ const ReviewPage = async ({ params }: ReviewPageParams) => {
     return <div className="text-center">Quiz not found or unauthorized</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 flex gap-3">
-        Quiz Review <Image src={trophy} alt="trophy" width={50} />
+    <div className="max-w-[60rem] mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 flex gap-4 items-center">
+        Quiz Review <Trophy size={30} />
       </h1>
       <p className="text-lg font-semibold mb-4">
-        Score: {quiz.score} / {quiz.questions.length}
+        Score: {quiz.score ?? "N/A"} / {quiz.questions.length}
       </p>
 
       {quiz.questions.map((q, idx) => {
@@ -77,6 +80,9 @@ const ReviewPage = async ({ params }: ReviewPageParams) => {
           </div>
         );
       })}
+      <Link href="/dashboard" className="flex items-center gap-2 text-gray-300 hover:brightness-110">
+        <MoveLeft /> Back to dashboard
+      </Link>
     </div>
   );
 };
